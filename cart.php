@@ -1,13 +1,13 @@
-<?php 
+<?php
 session_start();
 require_once('php/createDb.php');
 require_once('php/components.php');
 $db = new CreateDb();
 
-if(isset($_POST['remove'])){
-    if($_GET['action'] == 'remove'){
-        foreach($_SESSION['cart'] as $key => $value){
-            if($value["product_id"] == $_GET['id']){
+if (isset($_POST['remove'])) {
+    if ($_GET['action'] == 'remove') {
+        foreach ($_SESSION['cart'] as $key => $value) {
+            if ($value["product_id"] == $_GET['id']) {
                 unset($_SESSION['cart'][$key]);
                 echo '<script>alert(تم حذف المنتج بنجاح);</script>';
                 echo '<script>window.location = "cart.php";</script>';
@@ -15,7 +15,7 @@ if(isset($_POST['remove'])){
         }
     }
 }
-if(isset($_POST['check']))
+if (isset($_POST['check']))
 ?>
 
 <!DOCTYPE html>
@@ -31,7 +31,7 @@ if(isset($_POST['check']))
     <title>cart</title>
 </head>
 
-<body >
+<body>
     <?php require_once('php/header.php'); ?>
 
     <div class="container-fluid">
@@ -39,66 +39,62 @@ if(isset($_POST['check']))
             <div class="col-md-7">
                 <div class="shopping-card">
                     <h5><i class="fa fa-shopping-cart px-2"></i>السلة
-                    <?php if(isset($_SESSION['cart'])){
-                                $count = count($_SESSION['cart']);
-                                echo "<small>($count منتجات)</small>";
-
-                            }
-                            else{
-                                echo "<small>(0 منتجات)</small>";
-                            }
-                            ?>
-                </h5>
-                   <?php 
-                   $total = 0;
-                 if(isset($_SESSION['cart'])){
-                    $product_id = array_column($_SESSION['cart'],'product_id');
-                    $result = $db->getBookData();
-                    while($row = mysqli_fetch_assoc($result)){
-                        foreach($product_id as $id){
-                            if($row['id'] == $id){
-                                cardElement($row['product_image'],$row['product_name'],$row['product_price'],$row['id']);
-                                $total = $total + (float)$row['product_price'];
-
+                        <?php if (isset($_SESSION['cart'])) {
+                            $count = count($_SESSION['cart']);
+                            echo "<small>($count منتجات)</small>";
+                        } else {
+                            echo "<small>(0 منتجات)</small>";
+                        }
+                        ?>
+                    </h5>
+                    <?php
+                    $total = 0;
+                    if (isset($_SESSION['cart'])) {
+                        $product_id = array_column($_SESSION['cart'], 'product_id');
+                        $result = $db->getBookData();
+                        while ($row = mysqli_fetch_assoc($result)) {
+                            foreach ($product_id as $id) {
+                                if ($row['id'] == $id) {
+                                    cardElement($row['product_image'], $row['product_name'], $row['product_price'], $row['id']);
+                                    $total = $total + (float)$row['product_price'];
+                                }
                             }
                         }
+                    } else {
+                        echo '<h5>السلة فارغة</h5>';
                     }
-                 }
-                 else{
-                     echo '<h5>السلة فارغة</h5>';
-                 }
-                   ?>
-                   
+                    ?>
+
                 </div>
             </div>
             <form method="get" action="login.php" class="col-md-4 offset-md-1 border rounded mx-auto mt-5 bg-white h-25">
                 <div class="pt-4">
-                   
+
                     <div class="row price-details">
                         <div class="col-md-6">
 
-                        <h6>المجموع</h6>
+                            <h6>المجموع</h6>
                             <h6>تكاليف الشحن</h6>
-                           
+
                             <h5><span class="text-danger">
-                                المجموع الكلي
-                            
-                            </span>
-                        <samll style="color:gray;font-size:10px">شامل الضريبة</samll>
-                        </h5>
+                                    المجموع الكلي
+
+                                </span>
+                                <samll style="color:gray;font-size:10px">شامل الضريبة</samll>
+                            </h5>
                         </div>
                         <div class="col-md-6">
                             <h6 class="text-center">
-                                <?php echo $total.'ر.س.';?>
+                                <?php echo $total . 'ر.س.'; ?>
                             </h6>
                             <h6 class="text-success text-center">
                                 مجاني
                             </h6>
                             <h6 class="text-danger text-center">
-                            <?php 
-                            echo $total;
-                            ?>
-                            ر.س.
+                                <?php
+                                echo $total;
+                                ?>
+                                ر.س.
                             </h6>
                         </div>
                     </div>
@@ -107,11 +103,11 @@ if(isset($_POST['check']))
                         <br>
                         <br>
                         <br>
-                    <samll style="color:gray;font-size:12px">بالضغط على "انهاء التسوق" فانت توافق على 
-                <span class="text-info">الشروط و الأحكام و سياسة الخصوصية</span>
-                </samll>
+                        <samll style="color:gray;font-size:12px">بالضغط على "انهاء التسوق" فانت توافق على
+                            <span class="text-info">الشروط و الأحكام و سياسة الخصوصية</span>
+                        </samll>
                     </div>
-                <a href="login.php" class="btn btn-danger text-white w-100 my-3">انهاء السوق</a>
+                    <a href="wallet/index.php" class="btn btn-danger text-white w-100 my-3">انهاء السوق</a>
 
                 </div>
             </form>
